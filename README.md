@@ -56,6 +56,17 @@ npm run dev
 
 The app synchronizes the database schema on startup (using `sequelize.sync({ alter: true })`). For production use migrations instead.
 
+Important: development branch
+
+Work on the `dev` branch for development and testing. Ensure you're on `dev` before starting the application or running the auto-seeder:
+
+```bash
+git checkout dev
+git pull origin dev
+npm run dev
+```
+
+
 ## Docker
 
 Build and run with Docker (example):
