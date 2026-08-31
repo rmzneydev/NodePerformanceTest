@@ -6,10 +6,10 @@ import sequelize from "../config/database";
 /**
  * Defines the roles available for application users.
  */
-export type UserRole = "admin" | "request_manager";
+export type UserRole = "admin" | "manager";
 
 /**
- * Represents the attributes of a user.
+ * Represents the attributes of a user stored in the database.
  */
 export interface UserAttributes {
   /** Unique identifier of the user. */
@@ -18,7 +18,7 @@ export interface UserAttributes {
   /** Full name of the user. */
   name: string;
 
-  /** Unique email address used by the user. */
+  /** Unique email address of the user. */
   email: string;
 
   /** Hashed password of the user. */
@@ -26,21 +26,27 @@ export interface UserAttributes {
 
   /** Role assigned to the user. */
   role: UserRole;
+
+  /** Indicates whether the user is currently active. */
+  isActive: boolean;
 }
 
 /**
  * Defines the attributes required when creating a new user.
  *
- * The `id` attribute is optional because it is automatically generated
- * by the database.
+ * The `id`, `role`, and `isActive` attributes are optional because
+ * they are automatically generated or assigned default values.
  */
-export interface UserCreationAttributes extends Optional<UserAttributes, "id" > { }
+export interface UserCreationAttributes
+  extends Optional<UserAttributes, "id" | "isActive" | "role"> {}
 
 /**
  * Sequelize model representing an application user.
  */
-export class User extends Model<UserAttributes, UserCreationAttributes>
-  implements UserAttributes {
+export class User
+  extends Model<UserAttributes, UserCreationAttributes>
+  implements UserAttributes
+{
   /** Unique identifier of the user. */
   public id!: number;
 
@@ -55,6 +61,9 @@ export class User extends Model<UserAttributes, UserCreationAttributes>
 
   /** Role assigned to the user. */
   public role!: UserRole;
+
+  /** Indicates whether the user is currently active. */
+  public isActive!: boolean;
 }
 
 /**
@@ -63,8 +72,8 @@ export class User extends Model<UserAttributes, UserCreationAttributes>
  * The model is mapped to the `users` table and uses underscored column
  * names and automatic timestamps.
  *
- * Passwords are automatically hashed before a user is created or when
- * an existing user's password is modified.
+ * Passwords are automatically hashed before creating a user or when
+ * an existing user's password is updated.
  */
 User.init(
   {
@@ -111,11 +120,25 @@ User.init(
 
     /**
      * Role assigned to the user.
+     *
+     * Defaults to `manager` when no role is explicitly provided.
      */
     role: {
-      type: DataTypes.ENUM("admin", "request_manager"),
+      type: DataTypes.ENUM("admin", "manager"),
       allowNull: false,
-      defaultValue: "user",
+      defaultValue: "manager",
+    },
+
+    /**
+     * Indicates whether the user is active.
+     *
+     * The database column is stored as `is_active`.
+     */
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+      field: "is_active",
     },
   },
   {
@@ -123,10 +146,6 @@ User.init(
     tableName: "users",
     underscored: true,
     timestamps: true,
-
-    /**
-     * Sequelize hooks used to hash user passwords automatically.
-     */
     hooks: {
       /**
        * Hashes the user's password before creating a new user.
@@ -138,8 +157,8 @@ User.init(
       },
 
       /**
-       * Hashes the user's password before updating the user when
-       * the password has been changed.
+       * Hashes the user's password before updating the user
+       * when the password has been changed.
        */
       beforeUpdate: async (user: User) => {
         if (user.changed("password")) {
