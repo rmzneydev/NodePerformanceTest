@@ -7,6 +7,7 @@ import warehouseRoutes from "./warehouse.routes";
 import medicineRoutes from "./medicine.routes";
 import inventoryRoutes from "./inventory.routes";
 import supplyRequestRoutes from "./supplyRequest.routes";
+import seederRoutes from "./seeder.routes";
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router.use("/warehouses", warehouseRoutes);
 router.use("/medicines", medicineRoutes);
 router.use("/inventory", inventoryRoutes);
 router.use("/requests", supplyRequestRoutes);
+router.use("/seed", seederRoutes);
 
 
 export default router;
