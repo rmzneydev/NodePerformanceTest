@@ -1,0 +1,18 @@
+{
+  "users": [
+    { "name": "Admin", "email": "admin@example.com", "password": "Admin1234", "role": "admin", "isActive": true },
+    { "name": "User Demo", "email": "user@example.com", "password": "User12345", "role": "manager", "isActive": true }
+  ],
+  "clinics": [
+    { "name": "Clínica Central", "nit": "900123456-1", "address": "Calle 50 #45-12", "phone": "3101234567" },
+    { "name": "Clínica del Norte", "nit": "900234567-2", "address": "Carrera 20 #80-30", "phone": "3202345678" }
+  ],
+  "warehouses": [
+    { "name": "Bodega Norte", "location": "Medellín", "address": "Calle 50 #10" },
+    { "name": "Bodega Sur", "location": "Cali", "address": "Carrera 30 #20" }
+  ],
+  "medicines": [
+    { "name": "Acetaminofén", "code": "MED-001", "description": "Analgésico", "manufacturer": "Genfar" },
+    { "name": "Ibuprofeno", "code": "MED-002", "description": "Antiinflamatorio", "manufacturer": "Procaps" }
+  ]
+}

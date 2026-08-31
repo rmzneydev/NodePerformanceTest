@@ -13,6 +13,7 @@ import "dotenv/config";
 
 import app from "./server";
 import sequelize from "./config/database";
+import { runAutoSeed } from "./seeders/auto-seed";
 
 const PORT = process.env.APP_PORT || 3000;
 
@@ -42,6 +43,10 @@ const start = async (): Promise<void> => {
       console.log(`Server listening on port ${PORT}.`);
       console.log(`API documentation: http://localhost:${PORT}/api/docs`);
       console.log(`Health check: http://localhost:${PORT}/health`);
+
+      // Ejecuta el seeder automático una vez el servidor está listo para
+      // aceptar peticiones (no bloquea el arranque ni tira el proceso si falla).
+      void runAutoSeed();
     });
   } catch (error) {
     console.error("Failed to connect to the database.", error);
