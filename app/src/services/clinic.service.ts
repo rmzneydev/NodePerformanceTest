@@ -2,7 +2,7 @@
 import clinicRepository from "../repositories/clinic.repository";
 import { ConflictError, NotFoundError } from "../error/AppError";
 import { CreateClinicDto, UpdateClinicDto } from "../dto/clinic.dto";
-import { IClinicService } from "./interfaces/IClinicService.Interface";
+import { ListResult, IClinicService } from "./interfaces/IClinicService.Interface";
 import { IClinicRepository } from "../repositories/interfaces/IClinicRepository.Interface";
 import { User } from "../models/user.model";
 
@@ -29,9 +29,12 @@ class ClinicService implements IClinicService {
     return this.toJSON(clinic);
   }
 
-  async list(): Promise<Record<string, unknown>[]> {
+  async list(): Promise<ListResult> {
     const clinics = await this.repo.findAll();
-    return clinics.map((c) => this.toJSON(c));
+    if (clinics.length === 0) {
+      return { data: [], message: "No hay clínicas registradas" };
+    }
+    return { data: clinics.map((c) => this.toJSON(c)) };
   }
 
   async getById(id: number): Promise<Record<string, unknown>> {

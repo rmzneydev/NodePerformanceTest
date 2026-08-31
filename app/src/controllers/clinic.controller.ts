@@ -10,8 +10,8 @@ export const createClinic = asyncHandler(async (req: Request, res: Response) => 
 });
 
 export const listClinics = asyncHandler(async (_req: Request, res: Response) => {
-  const clinics = await clinicService.list();
-  sendSuccess(res, clinics);
+  const { data, message } = await clinicService.list();
+  sendSuccess(res, data, { message });
 });
 
 export const getClinicById = asyncHandler(async (req: Request, res: Response) => {

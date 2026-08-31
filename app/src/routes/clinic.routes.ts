@@ -49,7 +49,7 @@ router.post("/", authenticate, authorize("admin"), createClinic);
  *     responses:
  *       200: { description: Lista de clínicas }
  */
-router.get("/", authenticate, authorize("admin"), listClinics);
+router.get("/", listClinics);
 
 /**
  * @swagger
@@ -67,7 +67,7 @@ router.get("/", authenticate, authorize("admin"), listClinics);
  *       200: { description: Clínica }
  *       404: { description: No encontrada }
  */
-router.get("/:id", authenticate, authorize("admin"), getClinicById);
+router.get("/:id", getClinicById);
 
 /**
  * @swagger
